@@ -1,7 +1,7 @@
 #include <iostream>
 #include <algorithm>
-#include "math.h" // should not need once i clean up log2
 
+#include <bitset> // for debugging purposes
 
 //TODO this should not be declared here...
 int n = 15;
@@ -9,9 +9,9 @@ int n = 15;
 // Implemented branchy_search straight from Eytzinger paper
 template<typename Data, size_t n>
 int branchy_search_original(Data (&arr)[n], Data element){
-	
-	int i = 0;
 
+	int i = 0;
+	
 	while (i < n){
 		i = ( element <= arr[i]) ? (2 * i + 1) : (2 * i + 2);
 	}
@@ -38,6 +38,17 @@ int eytzinger_next(int i, int n){
 		path = path << (treeDepth - iDepth - 1);
 		return path - 1;
 
+	}
+}
+
+//TODO: bounds check for going past the start of the sorted array
+int eytzinger_prev(int i, int n){
+	if (2 * i + 2 > n - 1){
+		int j = (i + 1) >> __builtin_ffs(i + 1);
+		return j - 1;
+
+	}else{
+		return 1;
 	}
 }
 

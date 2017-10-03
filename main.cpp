@@ -10,9 +10,22 @@ int main(){
 	//int current = 7;
 	//for(int i = 0;3i < n; i ++){
 	//	std::cout << eytzingerArray[current] << " " << std::endl;
-		std::cout << "Looking for the index of the next element after: " << eytzingerArray[3] << ", At position " << 3  << std::endl;
-		int next = eytzinger_next(3, n);
-		std::cout << "WE GOT: " << next << std::endl;
+	
+	std::cout << "Looking for the index of the prev element before: " << eytzingerArray[11] << ", At position " << 11  << std::endl;
+	int next = eytzinger_prev(11, n);
+	std::cout << "WE GOT: " << next << std::endl;
+
+
+	next = eytzinger_prev(12, n);
+	std::cout << "WE GOT: " << next << std::endl;
+
+
+	next = eytzinger_prev(13, n);
+	std::cout << "WE GOT: " << next << std::endl;
+
+
+	next = eytzinger_prev(14, n);
+	std::cout << "WE GOT: " << next << std::endl;
 
 	//}
 
