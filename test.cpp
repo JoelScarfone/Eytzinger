@@ -9,7 +9,7 @@
 
 template<typename Data>
 int equal(Data *a, Data* b, int length){
-	for(int i = 0; i < n; i ++){
+	for(int i = 0; i < length; i ++){
 		if(a[i] != b[i]){
 			return 0;
 		}
@@ -41,7 +41,7 @@ TEST_CASE( "From sorted to eytzinger", "[eytzinger]" ) {
 	to_eyzinger(sortedArray);
 
     REQUIRE( equal(eytzingerArray, sortedArray, length) == 1);
-    
+
 }
 
 TEST_CASE( "From eytzinger to sorted", "[eytzinger]" ) {
@@ -51,14 +51,22 @@ TEST_CASE( "From eytzinger to sorted", "[eytzinger]" ) {
 TEST_CASE( "Eytzinger next", "[eytzinger]" ) {
 
 	int eytzingerArray[] = {8, 4, 12, 2, 6, 10, 14, 1, 3, 5,  7,  9,  11, 13, 15};
+	int length = 15;
 
-	REQUIRE( eytzinger_next(7, n) == 3);
-	REQUIRE( eytzinger_next(3, n) == 8);
-	REQUIRE( eytzinger_next(8, n) == 1);
-	REQUIRE( eytzinger_next(1, n) == 9);
+	REQUIRE( eytzinger_next(7, length) == 3);
+	REQUIRE( eytzinger_next(3, length) == 8);
+	REQUIRE( eytzinger_next(8, length) == 1);
+	REQUIRE( eytzinger_next(1, length) == 9);
 
 }
 
 TEST_CASE( "Eytzinger prev", "[eytzinger]" ) {
+	
+	int eytzingerArray[] = {8, 4, 12, 2, 6, 10, 14, 1, 3, 5,  7,  9,  11, 13, 15};
+	int length = 15;
+
+	REQUIRE( eytzinger_prev(3, length) == 7);
+	REQUIRE( eytzinger_prev(8, length) == 3);
+	REQUIRE( eytzinger_prev(1, length) == 8);
 
 }

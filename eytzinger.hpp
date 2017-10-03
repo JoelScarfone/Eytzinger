@@ -3,9 +3,6 @@
 
 #include <bitset> // for debugging purposes
 
-//TODO this should not be declared here...
-int n = 15;
-
 // Implemented branchy_search straight from Eytzinger paper
 template<typename Data, size_t n>
 int branchy_search_original(Data (&arr)[n], Data element){
@@ -50,7 +47,7 @@ int eytzinger_prev(int i, int n){
 
 		int iDepth = 32 - __builtin_clz(i + 1);
 		int treeDepth = 32 - __builtin_clz(n);
-		
+
 		int j = ~(~((i + 1) << 1) << (treeDepth - iDepth - 1));
 
 		return j - 1;	
