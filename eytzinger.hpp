@@ -7,7 +7,8 @@
 int n = 15;
 
 // Implemented branchy_search straight from Eytzinger paper
-int branchy_search_original(int element, int arr[]){
+template<typename Data, size_t n>
+int branchy_search_original(Data (&arr)[n], Data element){
 	
 	int i = 0;
 
@@ -20,26 +21,23 @@ int branchy_search_original(int element, int arr[]){
 
 }
 
-// Returns the item successing they eyztinger layed-out array element arr[i],
-//TODO fix log_2 builting clz 9 counts leading 0s 
-int eytzinger_next(int i){
+// Returns the index of the item successing they eyztinger layed-out array element arr[i], with |arr| = n
+int eytzinger_next(int i, int n){
 
 	if (2 * i + 2 > n - 1){
 		int j = (i + 1) >> __builtin_ffs(~(i + 1));
 		return (j > n) ? -1 : j - 1;
 	}else{
 
-		int iDepth = log2(i + 1);
-		int treeDepth = log2(n);
+		int iDepth = 32 - __builtin_clz(i + 1);
+		int treeDepth = 32 - __builtin_clz(n);
 
 		int path = i + 1;
-
 		path = path << 1;
-
 		path |= 1 << 0;
-		path = path << (treeDepth - iDepth - 2);
-
+		path = path << (treeDepth - iDepth - 1);
 		return path - 1;
+
 	}
 }
 
@@ -90,9 +88,9 @@ void jain_outshuffle(Data *a, Index n) {
 	std::rotate(a+m/2, a+m, a+m+(n-m)/2);
 }
 
-template<typename Data, size_t size>
-void to_eyzinger(Data (&array)[size]) {
-	int todo = size;
+template<typename Data, size_t n>
+void to_eyzinger(Data (&array)[n]) {
+	int todo = n;
 	while(todo > 1){
 		jain_outshuffle(array, todo);
 		todo = todo / 2;

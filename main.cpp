@@ -1,24 +1,34 @@
 #include <iostream>
-#include "eytzinger.h"
-
-
+#include "eytzinger.hpp"
 
 int main(){
 
 	int eytzingerArray[] = {8, 4, 12, 2, 6, 10, 14, 1, 3, 5,  7,  9,  11, 13, 15};
 	int sortedArray[] =    {1, 2, 3,  4, 5, 6,  7,  8, 9, 10, 11, 12, 13, 14, 15};
+	int n = 15;
 
-	to_eyzinger(sortedArray);
+	//int current = 7;
+	//for(int i = 0;3i < n; i ++){
+	//	std::cout << eytzingerArray[current] << " " << std::endl;
+		std::cout << "Looking for the index of the next element after: " << eytzingerArray[3] << ", At position " << 3  << std::endl;
+		int next = eytzinger_next(3, n);
+		std::cout << "WE GOT: " << next << std::endl;
 
-	std::cout << "Got:" << std::endl;
-	for(int i = 0; i < n; i ++){
-		std::cout << sortedArray[i] << " ";
-	}
-	std::cout << std::endl << std::endl << "Looking For:" << std::endl;
-	for(int i = 0; i < n; i++){
-		std::cout << eytzingerArray[i] << " ";
-	}
-	std::cout << std::endl;
+	//}
+
+	// to_eyzinger(sortedArray);
+
+	// std::cout << "Got:" << std::endl;
+	// for(int i = 0; i < n; i ++){
+	// 	std::cout << sortedArray[i] << " ";
+	// }
+
+	// std::cout << std::endl << std::endl << "Looking For:" << std::endl;
+	// for(int i = 0; i < n; i++){
+	// 	std::cout << eytzingerArray[i] << " ";
+	// }
+
+	// std::cout << std::endl;
 
 }
 
