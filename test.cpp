@@ -21,6 +21,8 @@ int equal(Data *a, Data* b, int length){
 * Test cases for eytzinger.hpp
 ----------------------------------------*/
 
+//TODO: Add basic test cases for arrays not of length 2^n - 1
+
 TEST_CASE( "Eytzinger search", "[eytzinger]" ) {
 
 	int eytzingerArray[] = {8, 4, 12, 2, 6, 10, 14, 1, 3, 5,  7,  9,  11, 13, 15};
