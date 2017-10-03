@@ -11,21 +11,23 @@ int main(){
 	//for(int i = 0;3i < n; i ++){
 	//	std::cout << eytzingerArray[current] << " " << std::endl;
 	
-	std::cout << "Looking for the index of the prev element before: " << eytzingerArray[11] << ", At position " << 11  << std::endl;
-	int next = eytzinger_prev(11, n);
+	///std::cout << "Looking for the index of the prev element before: " << eytzingerArray[11] << ", At position " << 11  << std::endl;
+	int next = eytzinger_prev(1, n);
+	std::cout << "WE GOT: " << next << std::endl;
+
+	std::cout << std::endl;
+
+
+	next = eytzinger_prev(5, n);
 	std::cout << "WE GOT: " << next << std::endl;
 
 
-	next = eytzinger_prev(12, n);
-	std::cout << "WE GOT: " << next << std::endl;
+	// next = eytzinger_prev(13, n);
+	// std::cout << "WE GOT: " << next << std::endl;
 
 
-	next = eytzinger_prev(13, n);
-	std::cout << "WE GOT: " << next << std::endl;
-
-
-	next = eytzinger_prev(14, n);
-	std::cout << "WE GOT: " << next << std::endl;
+	// next = eytzinger_prev(14, n);
+	// std::cout << "WE GOT: " << next << std::endl;
 
 	//}
 

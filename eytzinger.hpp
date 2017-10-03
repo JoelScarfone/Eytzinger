@@ -46,9 +46,14 @@ int eytzinger_prev(int i, int n){
 	if (2 * i + 2 > n - 1){
 		int j = (i + 1) >> __builtin_ffs(i + 1);
 		return j - 1;
-
 	}else{
-		return 1;
+
+		int iDepth = 32 - __builtin_clz(i + 1);
+		int treeDepth = 32 - __builtin_clz(n);
+		
+		int j = ~(~((i + 1) << 1) << (treeDepth - iDepth - 1));
+
+		return j - 1;	
 	}
 }
 
