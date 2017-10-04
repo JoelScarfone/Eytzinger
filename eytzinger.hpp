@@ -55,7 +55,7 @@ int eytzinger_prev(int i, int n){
 }
 
 /*----------------------------------------------------
-Everything below here is dealing with in place algorythms
+Everything below here is dealing with in place algorithms
 to move from sorted order to eytzinger order, and vise-versa
 ----------------------------------------------------*/
 
