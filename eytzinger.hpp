@@ -174,15 +174,26 @@ int preshuffle(Data *a, Index n) {
 	return n - items;
 }
 
-template<typename Data, size_t n>
-void to_eyzinger(Data (&array)[n]) {
+template<typename Data, typename Index>
+int to_eyzinger(Data *a, Index n) {
 
-	int todo = preshuffle(array, n);
+	int todo = preshuffle(a, n);
 
 	while(todo > 1){
-		outshuffle(array, todo);
+		outshuffle(a, todo);
 		todo = todo / 2;
 	}
 
 }
 
+template<typename Data, typename Index>
+int to_eyzinger_jain(Data *a, Index n) {
+
+	int todo = preshuffle(a, n);
+
+	while(todo > 1){
+		jain_outshuffle(a, todo);
+		todo = todo / 2;
+	}
+
+}

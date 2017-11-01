@@ -15,7 +15,7 @@ int isEytzinger(Data *a, int length){
 		if(2 * i + 1 >= length){ continue; }
 		if(a[i] < a[2 * i + 1]){ return 0; }
 
-		if(2 * i + 2 >= length){ return 1; }
+		if(2 * i + 2 >= length){ continue; }
 		if(a[i] > a[2 * i + 2]){ return 0; }	
 
 	}
@@ -52,19 +52,19 @@ TEST_CASE( "Eytzinger search", "[eytzinger]" ) {
 
 }
 
-TEST_CASE( "From sorted to eytzinger", "[eytzinger]" ) {
+TEST_CASE( "From sorted to eytzinger (using outshuffle)", "[eytzinger]" ) {
 
 	int sortedArray1[1];
 	int sortedArray2[2];
 	int sortedArray3[63];
 	int sortedArray4[100];
-	int sortedArray5[100000];
+	int sortedArray5[1000000];
 
 	int n1 = 1;
 	int n2 = 2;
 	int n3 = 63;
 	int n4 = 100;
-	int n5 = 100000;
+	int n5 = 1000000;
 
 	for(int i = 0; i < n1 ; i ++){
 		sortedArray1[i] = i + 1;
@@ -86,11 +86,59 @@ TEST_CASE( "From sorted to eytzinger", "[eytzinger]" ) {
 		sortedArray5[i] = i + 1;
 	}
 
-	to_eyzinger(sortedArray1);
-	to_eyzinger(sortedArray2);
-	to_eyzinger(sortedArray3);
-	to_eyzinger(sortedArray4);
-	to_eyzinger(sortedArray5);
+	to_eyzinger(sortedArray1, n1);
+	to_eyzinger(sortedArray2, n2);
+	to_eyzinger(sortedArray3, n3);
+	to_eyzinger(sortedArray4, n4);
+	to_eyzinger(sortedArray5, n5);
+
+	REQUIRE( isEytzinger(sortedArray1, n1) == 1);
+	REQUIRE( isEytzinger(sortedArray2, n2) == 1);
+	REQUIRE( isEytzinger(sortedArray3, n3) == 1);
+	REQUIRE( isEytzinger(sortedArray4, n4) == 1);
+	REQUIRE( isEytzinger(sortedArray5, n5) == 1);
+
+}
+
+TEST_CASE( "From sorted to eytzinger (using jain_outshuffle)", "[eytzinger]" ) {
+
+	int sortedArray1[1];
+	int sortedArray2[2];
+	int sortedArray3[63];
+	int sortedArray4[100];
+	int sortedArray5[1000000];
+
+	int n1 = 1;
+	int n2 = 2;
+	int n3 = 63;
+	int n4 = 100;
+	int n5 = 1000000;
+
+	for(int i = 0; i < n1 ; i ++){
+		sortedArray1[i] = i + 1;
+	}
+
+	for(int i = 0; i < n2 ; i ++){
+		sortedArray2[i] = i + 1;
+	}
+
+	for(int i = 0; i < n3 ; i ++){
+		sortedArray3[i] = i + 1;
+	}
+
+	for(int i = 0; i < n4 ; i ++){
+		sortedArray4[i] = i + 1;
+	}
+
+	for(int i = 0; i < n5 ; i ++){
+		sortedArray5[i] = i + 1;
+	}
+
+	to_eyzinger_jain(sortedArray1, n1);
+	to_eyzinger_jain(sortedArray2, n2);
+	to_eyzinger_jain(sortedArray3, n3);
+	to_eyzinger_jain(sortedArray4, n4);
+	to_eyzinger_jain(sortedArray5, n5);
 
 	REQUIRE( isEytzinger(sortedArray1, n1) == 1);
 	REQUIRE( isEytzinger(sortedArray2, n2) == 1);

@@ -4,5 +4,8 @@ main: main.cpp eytzinger.hpp
 test: test.cpp eytzinger.hpp
 	g++ -o test test.cpp eytzinger.hpp
 
+benchmark: benchmark.cpp eytzinger.hpp
+	g++ -o benchmark benchmark.cpp eytzinger.hpp -std=gnu++11
+
 clean:
-	rm main test
+	rm -f main test benchmark
