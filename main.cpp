@@ -1,13 +1,17 @@
 #include <iostream>
+#include<chrono>
 #include "eytzinger.hpp"
 
 int main(){
 
+	std::chrono::duration<double> elapsed;
+
+
 	int eytzingerArray[] = {8, 4, 12, 2, 6, 10, 14, 1, 3, 5,  7,  9,  11, 13, 15};
 	
 
-	int n = 100;
-	int sortedArray[100];
+	int n = 1000000;
+	int sortedArray[1000000];
 
 	for(int i = 0; i < n ; i ++){
 		sortedArray[i] = i + 1;
@@ -37,14 +41,11 @@ int main(){
 
 	//}
 
+	auto start = std::chrono::high_resolution_clock::now();
 	to_eyzinger(sortedArray);
-
-	std::cout << "\nArray : ";
-	for(int i = 0; i < n; i ++){
-		std::cout << sortedArray[i] << " ";
-	}
-
-	std::cout << std::endl;
+	auto stop =  std::chrono::high_resolution_clock::now();
+	elapsed = stop - start;
+	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 
 	// std::cout << std::endl << std::endl << "Looking For:" << std::endl;
 	// for(int i = 0; i < n; i++){

@@ -59,73 +59,73 @@ Everything below here is dealing with in place algorithms
 to move from sorted order to eytzinger order, and vise-versa
 ----------------------------------------------------*/
 
-// template<typename I>
-// inline I outshuffle_perm3(I i, I n) {
-// 	I out = i/2;
-// 	I fix = (i & 1) ? 0 : n/2;
-// 	return out+fix;
-// }
+template<typename I>
+inline I outshuffle_perm3(I i, I n) {
+	I out = i/2;
+	I fix = (i & 1) ? 0 : n/2;
+	return out+fix;
+}
 
-// template<typename Data, typename Index>
-// void jain_outshuffle(Data *a, Index n) {
-
-
-// 	if (n <= 1) return;
-// 	// Compute appropriate value of m
-// 	Index m = 1;
-// 	while (3*m-1 <= n) m *= 3;
-// 	m -= 1;
-
-// 	std::cout << "\nm: " << m << std::endl;
-
-// 	// Use Jain's trick to shuffle a[0,...,m-1];
-// 	for (Index g = 1; g < m; g *= 3) {
-// 		std::cout << "\ng: " << g << std::endl; 
-// 		Index cur = g-1;
-// 		Data t[2];
-// 		int flipflop = 0;
-// 		t[flipflop] = a[cur];
-// 		do {
-
-// 			std::cout << "\ncur: " << cur << std::endl;
-// 			Index nxt = outshuffle_perm3(cur, m);
-// 			std::cout << "nxt: " << nxt << std::endl;
-// 			std::cout << "flipflop: " << flipflop << std::endl;
-// 			t[!flipflop] = a[nxt];
-// 			a[nxt] = t[flipflop];
-// 			flipflop = !flipflop;
-// 			cur = nxt;
-// 		} while (cur != g-1);
-// 	}
-
-// 	for (int i = 0; i < n; i ++){
-// 		std::cout << a[i] << " ";
-// 	}
-
-// 	std::cout << std::endl;
-
-// 	// Recurse on a[m,...n-1]
-// 	jain_outshuffle(a+m, n-m);
-
-// 	std::cout << "Done most, now calling rotate on a = ";
-
-// 	for (int i = 0; i < n; i ++){
-// 		std::cout << a[i] << " ";
-// 	}
-
-// 	// Regroup odds and evens
-// 	std::rotate(a+m/2, a+m, a+m+(n-m)/2);
-
-// 	std::cout << "\nDone rotate, now a = ";
-
-// 	for (int i = 0; i < n; i ++){
-// 		std::cout << a[i] << " ";
-// 	}
-
-// 	std::cout << std::endl;
+template<typename Data, typename Index>
+void jain_outshuffle(Data *a, Index n) {
 
 
-// }
+	if (n <= 1) return;
+	// Compute appropriate value of m
+	Index m = 1;
+	while (3*m-1 <= n) m *= 3;
+	m -= 1;
+
+	//std::cout << "\nm: " << m << std::endl;
+
+	// Use Jain's trick to shuffle a[0,...,m-1];
+	for (Index g = 1; g < m; g *= 3) {
+		//std::cout << "\ng: " << g << std::endl; 
+		Index cur = g-1;
+		Data t[2];
+		int flipflop = 0;
+		t[flipflop] = a[cur];
+		do {
+
+			//std::cout << "\ncur: " << cur << std::endl;
+			Index nxt = outshuffle_perm3(cur, m);
+		//	std::cout << "nxt: " << nxt << std::endl;
+			//std::cout << "flipflop: " << flipflop << std::endl;
+			t[!flipflop] = a[nxt];
+			a[nxt] = t[flipflop];
+			flipflop = !flipflop;
+			cur = nxt;
+		} while (cur != g-1);
+	}
+
+	// for (int i = 0; i < n; i ++){
+	// 	std::cout << a[i] << " ";
+	// }
+
+	//std::cout << std::endl;
+
+	// Recurse on a[m,...n-1]
+	jain_outshuffle(a+m, n-m);
+
+	//std::cout << "Done most, now calling rotate on a = ";
+
+	// for (int i = 0; i < n; i ++){
+	// 	std::cout << a[i] << " ";
+	// }
+
+	// Regroup odds and evens
+	std::rotate(a+m/2, a+m, a+m+(n-m)/2);
+
+	//std::cout << "\nDone rotate, now a = ";
+
+	// for (int i = 0; i < n; i ++){
+	// 	std::cout << a[i] << " ";
+	// }
+
+	//std::cout << std::endl;
+
+
+}
 
 template<typename Data, typename Index>
 void outshuffle(Data *a, Index n) {
