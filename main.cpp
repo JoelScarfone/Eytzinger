@@ -4,22 +4,28 @@
 int main(){
 
 	int eytzingerArray[] = {8, 4, 12, 2, 6, 10, 14, 1, 3, 5,  7,  9,  11, 13, 15};
-	int sortedArray[] =    {1, 2, 3,  4, 5, 6,  7,  8, 9, 10, 11, 12, 13, 14, 15};
-	int n = 15;
+	
+
+	int n = 100;
+	int sortedArray[100];
+
+	for(int i = 0; i < n ; i ++){
+		sortedArray[i] = i + 1;
+	}
 
 	//int current = 7;
 	//for(int i = 0;3i < n; i ++){
 	//	std::cout << eytzingerArray[current] << " " << std::endl;
 	
-	///std::cout << "Looking for the index of the prev element before: " << eytzingerArray[11] << ", At position " << 11  << std::endl;
-	int next = eytzinger_prev(1, n);
-	std::cout << "WE GOT: " << next << std::endl;
+	// ///std::cout << "Looking for the index of the prev element before: " << eytzingerArray[11] << ", At position " << 11  << std::endl;
+	// int next = eytzinger_prev(1, n);
+	// std::cout << "WE GOT: " << next << std::endl;
 
-	std::cout << std::endl;
+	// std::cout << std::endl;
 
 
-	next = eytzinger_prev(5, n);
-	std::cout << "WE GOT: " << next << std::endl;
+	// next = eytzinger_prev(5, n);
+	// std::cout << "WE GOT: " << next << std::endl;
 
 
 	// next = eytzinger_prev(13, n);
@@ -31,12 +37,14 @@ int main(){
 
 	//}
 
-	// to_eyzinger(sortedArray);
+	to_eyzinger(sortedArray);
 
-	// std::cout << "Got:" << std::endl;
-	// for(int i = 0; i < n; i ++){
-	// 	std::cout << sortedArray[i] << " ";
-	// }
+	std::cout << "\nArray : ";
+	for(int i = 0; i < n; i ++){
+		std::cout << sortedArray[i] << " ";
+	}
+
+	std::cout << std::endl;
 
 	// std::cout << std::endl << std::endl << "Looking For:" << std::endl;
 	// for(int i = 0; i < n; i++){
