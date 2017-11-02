@@ -3,6 +3,12 @@
 #include "catch.hpp"
 #include "eytzinger.hpp"
 
+const int n1 = 1;
+const int n2 = 2;
+const int n3 = 63;
+const int n4 = 100;
+const int n5 = 100000;
+
 /*----------------------------------------
 * Test helper functions
 ----------------------------------------*/
@@ -52,101 +58,94 @@ TEST_CASE( "Eytzinger search", "[eytzinger]" ) {
 
 }
 
-TEST_CASE( "From sorted to eytzinger (using outshuffle)", "[eytzinger]" ) {
+TEST_CASE( "From sorted to eytzinger (using outshuffle + preshufle)", "[eytzinger]" ) {
 
-	int sortedArray1[1];
-	int sortedArray2[2];
-	int sortedArray3[63];
-	int sortedArray4[100];
-	int sortedArray5[1000000];
+	auto *a1 = new std::uint32_t[n1];
+	auto *a2 = new std::uint32_t[n2];
+	auto *a3 = new std::uint32_t[n3];
+	auto *a4 = new std::uint32_t[n4];
+	auto *a5 = new std::uint32_t[n5];
 
-	int n1 = 1;
-	int n2 = 2;
-	int n3 = 63;
-	int n4 = 100;
-	int n5 = 1000000;
+	std::iota(a1, a1+n1, 0);
+	std::iota(a2, a2+n2, 0);
+	std::iota(a3, a3+n3, 0);
+	std::iota(a4, a4+n4, 0);
+	std::iota(a5, a5+n5, 0);
 
-	for(int i = 0; i < n1 ; i ++){
-		sortedArray1[i] = i + 1;
-	}
+	to_eyzinger(a1, n1);
+	to_eyzinger(a2, n2);
+	to_eyzinger(a3, n3);
+	to_eyzinger(a4, n4);
+	to_eyzinger(a5, n5);
 
-	for(int i = 0; i < n2 ; i ++){
-		sortedArray2[i] = i + 1;
-	}
-
-	for(int i = 0; i < n3 ; i ++){
-		sortedArray3[i] = i + 1;
-	}
-
-	for(int i = 0; i < n4 ; i ++){
-		sortedArray4[i] = i + 1;
-	}
-
-	for(int i = 0; i < n5 ; i ++){
-		sortedArray5[i] = i + 1;
-	}
-
-	to_eyzinger(sortedArray1, n1);
-	to_eyzinger(sortedArray2, n2);
-	to_eyzinger(sortedArray3, n3);
-	to_eyzinger(sortedArray4, n4);
-	to_eyzinger(sortedArray5, n5);
-
-	REQUIRE( isEytzinger(sortedArray1, n1) == 1);
-	REQUIRE( isEytzinger(sortedArray2, n2) == 1);
-	REQUIRE( isEytzinger(sortedArray3, n3) == 1);
-	REQUIRE( isEytzinger(sortedArray4, n4) == 1);
-	REQUIRE( isEytzinger(sortedArray5, n5) == 1);
+	REQUIRE( isEytzinger(a1, n1) == 1);
+	REQUIRE( isEytzinger(a2, n2) == 1);
+	REQUIRE( isEytzinger(a3, n3) == 1);
+	REQUIRE( isEytzinger(a4, n4) == 1);
+	REQUIRE( isEytzinger(a5, n5) == 1);
 
 }
 
-TEST_CASE( "From sorted to eytzinger (using jain_outshuffle)", "[eytzinger]" ) {
 
-	int sortedArray1[1];
-	int sortedArray2[2];
-	int sortedArray3[63];
-	int sortedArray4[100];
-	int sortedArray5[1000000];
+TEST_CASE( "From sorted to eytzinger (using outshuffle_jain)", "[eytzinger]" ) {
 
-	int n1 = 1;
-	int n2 = 2;
-	int n3 = 63;
-	int n4 = 100;
-	int n5 = 1000000;
+	auto *a1 = new std::uint32_t[n1];
+	auto *a2 = new std::uint32_t[n2];
+	auto *a3 = new std::uint32_t[n3];
+	auto *a4 = new std::uint32_t[n4];
+	auto *a5 = new std::uint32_t[n5];
 
-	for(int i = 0; i < n1 ; i ++){
-		sortedArray1[i] = i + 1;
-	}
+	std::iota(a1, a1+n1, 0);
+	std::iota(a2, a2+n2, 0);
+	std::iota(a3, a3+n3, 0);
+	std::iota(a4, a4+n4, 0);
+	std::iota(a5, a5+n5, 0);
 
-	for(int i = 0; i < n2 ; i ++){
-		sortedArray2[i] = i + 1;
-	}
+	to_eyzinger_jain(a1, n1);
+	to_eyzinger_jain(a2, n2);
+	to_eyzinger_jain(a3, n3);
+	to_eyzinger_jain(a4, n4);
+	to_eyzinger_jain(a5, n5);
 
-	for(int i = 0; i < n3 ; i ++){
-		sortedArray3[i] = i + 1;
-	}
-
-	for(int i = 0; i < n4 ; i ++){
-		sortedArray4[i] = i + 1;
-	}
-
-	for(int i = 0; i < n5 ; i ++){
-		sortedArray5[i] = i + 1;
-	}
-
-	to_eyzinger_jain(sortedArray1, n1);
-	to_eyzinger_jain(sortedArray2, n2);
-	to_eyzinger_jain(sortedArray3, n3);
-	to_eyzinger_jain(sortedArray4, n4);
-	to_eyzinger_jain(sortedArray5, n5);
-
-	REQUIRE( isEytzinger(sortedArray1, n1) == 1);
-	REQUIRE( isEytzinger(sortedArray2, n2) == 1);
-	REQUIRE( isEytzinger(sortedArray3, n3) == 1);
-	REQUIRE( isEytzinger(sortedArray4, n4) == 1);
-	REQUIRE( isEytzinger(sortedArray5, n5) == 1);
+	REQUIRE( isEytzinger(a1, n1) == 1);
+	REQUIRE( isEytzinger(a2, n2) == 1);
+	REQUIRE( isEytzinger(a3, n3) == 1);
+	REQUIRE( isEytzinger(a4, n4) == 1);
+	REQUIRE( isEytzinger(a5, n5) == 1);
 
 }
+
+
+TEST_CASE( "From sorted to eytzinger (using outshuffle_blocked)", "[eytzinger]" ) {
+
+	auto *a1 = new std::uint32_t[n1];
+	auto *a2 = new std::uint32_t[n2];
+	auto *a3 = new std::uint32_t[n3];
+	auto *a4 = new std::uint32_t[n4];
+	auto *a5 = new std::uint32_t[n5];
+
+	std::iota(a1, a1+n1, 0);
+	std::iota(a2, a2+n2, 0);
+	std::iota(a3, a3+n3, 0);
+	std::iota(a4, a4+n4, 0);
+	std::iota(a5, a5+n5, 0);
+
+	to_eyzinger_blocked(a1, n1);
+	to_eyzinger_blocked(a2, n2);
+	to_eyzinger_blocked(a3, n3);
+	to_eyzinger_blocked(a4, n4);
+	to_eyzinger_blocked(a5, n5);
+
+	REQUIRE( isEytzinger(a1, n1) == 1);
+	REQUIRE( isEytzinger(a2, n2) == 1);
+	REQUIRE( isEytzinger(a3, n3) == 1);
+	REQUIRE( isEytzinger(a4, n4) == 1);
+	REQUIRE( isEytzinger(a5, n5) == 1);
+
+}
+
+
+
 
 TEST_CASE( "From eytzinger to sorted", "[eytzinger]" ) {
 
