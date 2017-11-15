@@ -7,7 +7,7 @@ const int n1 = 1;
 const int n2 = 2;
 const int n3 = 63;
 const int n4 = 100;
-const int n5 = 100000;
+const int n5 = 33554431;
 
 /*----------------------------------------
 * Test helper functions
@@ -115,7 +115,6 @@ TEST_CASE( "From sorted to eytzinger (using outshuffle_jain)", "[eytzinger]" ) {
 
 }
 
-
 TEST_CASE( "From sorted to eytzinger (using outshuffle_blocked)", "[eytzinger]" ) {
 
 	auto *a1 = new std::uint32_t[n1];
@@ -143,9 +142,6 @@ TEST_CASE( "From sorted to eytzinger (using outshuffle_blocked)", "[eytzinger]" 
 	REQUIRE( isEytzinger(a5, n5) == 1);
 
 }
-
-
-
 
 TEST_CASE( "From eytzinger to sorted", "[eytzinger]" ) {
 

@@ -231,7 +231,7 @@ void outshuffle(Data *a, Index n) {
 
 }
 
-// This needs to be redone. The current runtime is O(n^2)...terrible...sadness...
+//Note this is O(N**2), as opposed to its linear counterpart preshuffle_2
 template<typename Data, typename Index>
 int preshuffle(Data *a, Index n) {
 
@@ -255,9 +255,74 @@ int preshuffle(Data *a, Index n) {
 }
 
 template<typename Data, typename Index>
+int preshuffle_2(Data *a, Index n) {
+
+	// No need to preshufle
+	if (((n + 1) & n) == 0) return n;
+
+	// we need to preshuffle i items, without messing up [last + 1..n-1]
+	int i = 0;
+	i |= 1 << (32 - __builtin_clz(n) - 1);
+	i = n - (i - 1);
+	int last = 2 * i - 1;
+
+	int every = 4;
+
+	for(int k = 1; k < i; k *= 2){
+		for(int j = k; j + k < i * 2 ; j += every){
+			int edge = j + k * 2;
+			if(edge > last){
+				edge = last;
+				last = last - k;
+			}
+			std::rotate(a + j, a + j + k, a + edge);
+		}
+		every *= 2;
+	}
+
+	std::rotate(a, a + i, a + n);
+
+	return n - i;
+}
+
+template<typename Data, typename Index>
+int preshuffle_3(Data *a, Index n) {
+
+	// No need to preshufle
+	if (((n + 1) & n) == 0) return n;
+
+	int i = 0;
+	i |= 1 << (32 - __builtin_clz(n) - 1);
+	i = n - (i - 1);
+
+	int every = 4;
+	for(int k = 1 ; k < i ; k *= 2){
+		for(int j = k; j + k < i * 2 ; j += every){
+			std::rotate(a + j, a + j + k, a + j + k * 2);
+		}
+		every *= 2;
+	}
+
+	std::rotate(a, a + i, a + n);
+
+	// need to regroup l items, no clue how yet...
+	// accounter for in preshuffle_2 but with an if statment in the nested for loop)
+	int l = 0;
+	l |= 1 << (32 - __builtin_clz(i));
+	l -= i;
+
+	// for(int p = 0; p < n ; p ++){
+	// 	std::cout << a[p] << " ";
+	// }
+	// std::cout << std::endl;
+
+	return n - i;
+}
+
+template<typename Data, typename Index>
 int to_eyzinger(Data *a, Index n) {
 
-	int todo = preshuffle(a, n);
+	int todo = preshuffle_2(a, n);
 
 	while(todo > 1){
 		outshuffle(a, todo);
@@ -269,7 +334,7 @@ int to_eyzinger(Data *a, Index n) {
 template<typename Data, typename Index>
 int to_eyzinger_jain(Data *a, Index n) {
 
-	int todo = preshuffle(a, n);
+	int todo = preshuffle_2(a, n);
 
 	while(todo > 1){
 		jain_outshuffle(a, todo);
@@ -283,7 +348,7 @@ int to_eyzinger_blocked(Data *a, Index n) {
 
 	const unsigned BLOCK=96;
 
-	int todo = preshuffle(a, n);
+	int todo = preshuffle_2(a, n);
 
 	while(todo > 1){
 		blocked_outshuffle<BLOCK>(a, todo);

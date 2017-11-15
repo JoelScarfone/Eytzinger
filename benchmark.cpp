@@ -1,12 +1,15 @@
 #include <iostream>
-#include<chrono>
+#include <chrono>
+#include <string>
 #include "eytzinger.hpp"
 
-int main(){
+void benchmark_outshuffle(){
 
-	int n = 33554431;
+	const int n = 134217727;
 
-	std::chrono::duration<double> elapsed;
+	std::cout << "-------------------------------------" << std::endl;
+	std::cout << "Benchmarking: outshuffles" << std::endl;
+	std::cout << "-------------------------------------" << std::endl << std::endl;
 
 	std::cout << "Building and filling...";
 	std::cout.flush();
@@ -15,16 +18,12 @@ int main(){
 	std::iota(a, a+n, 0);
 	std::cout << " done." << std::endl << std::endl;
 
-	std::cout << "-------------------------------------" << std::endl;
-	std::cout << "Testing: to_eyzinger" << std::endl;
-	std::cout << "-------------------------------------" << std::endl << std::endl;
-
 	std::cout << "Permuting using outshuffle...";
 	std::cout.flush();
 	auto start = std::chrono::high_resolution_clock::now();
 	outshuffle(a, n);
 	auto stop =  std::chrono::high_resolution_clock::now();
-	elapsed = stop - start;
+	std::chrono::duration<double> elapsed = stop - start;
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 
 	std::cout << "Refilling...";
@@ -55,5 +54,89 @@ int main(){
 	stop =  std::chrono::high_resolution_clock::now();
 	elapsed = stop - start;
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
+
+	std::cout << "Finished." << std::endl << std::endl;
+
+}
+
+void benchmark_presuffle(){
+
+	const int n = 100000000;
+
+	std::cout << "-------------------------------------" << std::endl;
+	std::cout << "Benchmarking: preshuffles" << std::endl;
+	std::cout << "-------------------------------------" << std::endl << std::endl;
+
+	std::cout << "Building and filling...";
+	std::cout.flush();
+	auto *a = new std::uint32_t[n];
+
+	std::iota(a, a+n, 0);
+	std::cout << " done." << std::endl << std::endl;
+
+	std::cout << "Permuting using preshuffle_2...";
+	std::cout.flush();
+	auto start = std::chrono::high_resolution_clock::now();
+	preshuffle_2(a, n);
+	auto stop =  std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> elapsed = stop - start;
+	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
+
+	std::cout << "Refilling...";
+	std::cout.flush();
+	std::iota(a, a+n, 0);
+	std::cout << "done" << std::endl;
+
+	std::cout << "Permuting using preshuffle_3...";
+	std::cout.flush();
+	start = std::chrono::high_resolution_clock::now();
+	preshuffle_3(a, n);
+	stop =  std::chrono::high_resolution_clock::now();
+	elapsed = stop - start;
+	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
+
+	// Commented out because preshuffle is just too slow
+	// std::cout << "Refilling...";
+	// std::cout.flush();
+	// std::iota(a, a+n, 0);
+	// std::cout << "done" << std::endl;
+
+	// std::cout << "Permuting using preshuffle...";
+	// std::cout.flush();
+	// start = std::chrono::high_resolution_clock::now();
+	// preshuffle(a, n);
+	// stop =  std::chrono::high_resolution_clock::now();
+	// elapsed = stop - start;
+	// std::cout << "done (" << elapsed.count() << "s)" << std::endl;
+
+}
+
+int main(int argc, char* argv[]){
+
+	int task = 0;
+
+	if (argc > 1){
+
+		std::string str1 (argv[1]);
+	  	std::string str2 ("outshuffle");
+  		std::string str3 ("preshuffle");
+
+		if (str1.compare(str2) == 0){
+			task = 1;
+		}
+		if (str1.compare(str3) == 0){
+			task = 2;
+		}
+	}
+
+	switch(task){
+		case 1: benchmark_outshuffle();
+				break;
+		case 2: benchmark_presuffle();
+				break;
+		default:benchmark_outshuffle();
+				benchmark_presuffle();
+				break;
+	}
 
 }
