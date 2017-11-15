@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <math.h>
 
 #include <bitset> // for debugging purposes
 
@@ -207,6 +208,29 @@ void blocked_outshuffle(Data *a, Index n) {
 }
 
 template<typename Data, typename Index>
+void rev_outshuffle(Data *a, Index n) {
+
+	if (n <= 1) return;
+
+	if (n <= 3){
+		std::rotate(a, a + 1, a + 2);		
+		return;
+	}
+
+	std::rotate(a, a + n / 2 , a + n);
+
+	int i = pow(2, 32 - __builtin_clz(n) - 2); 
+
+	while(i > 0){
+		for(int j = i; j < n; j += i * 4){
+			std::rotate(a + j, a + j + i, a + j + i * 2);
+		}
+		i = i / 2;
+	}
+
+}
+
+template<typename Data, typename Index>
 void outshuffle(Data *a, Index n) {
 
 	if (n <= 1) return;
@@ -285,6 +309,8 @@ int preshuffle_2(Data *a, Index n) {
 	return n - i;
 }
 
+// Initial results showing this yeilds minimal improvment over preshuffle_2
+// This is currently not working... ***
 template<typename Data, typename Index>
 int preshuffle_3(Data *a, Index n) {
 
@@ -305,7 +331,7 @@ int preshuffle_3(Data *a, Index n) {
 
 	std::rotate(a, a + i, a + n);
 
-	// need to regroup l items, no clue how yet...
+	// *** need to regroup l items, no clue how yet...
 	// accounter for in preshuffle_2 but with an if statment in the nested for loop)
 	int l = 0;
 	l |= 1 << (32 - __builtin_clz(i));
@@ -328,7 +354,6 @@ int to_eyzinger(Data *a, Index n) {
 		outshuffle(a, todo);
 		todo = todo / 2;
 	}
-
 }
 
 template<typename Data, typename Index>
@@ -340,7 +365,6 @@ int to_eyzinger_jain(Data *a, Index n) {
 		jain_outshuffle(a, todo);
 		todo = todo / 2;
 	}
-
 }
 
 template<typename Data, typename Index>
@@ -353,6 +377,17 @@ int to_eyzinger_blocked(Data *a, Index n) {
 	while(todo > 1){
 		blocked_outshuffle<BLOCK>(a, todo);
 		todo = todo / 2;
+	}
+}
+
+template<typename Data, typename Index>
+int to_sorted(Data *a, Index n) {
+
+	int todo = 2;
+
+	while(todo - 1 <= n){
+		rev_outshuffle(a, todo - 1);
+		todo *= 2;
 	}
 
 }
