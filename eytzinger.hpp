@@ -207,6 +207,7 @@ void blocked_outshuffle(Data *a, Index n) {
 	std::rotate(a+m/2, a+m, a+m+r/2);
 }
 
+
 template<typename Data, typename Index>
 void rev_outshuffle(Data *a, Index n) {
 
@@ -226,6 +227,24 @@ void rev_outshuffle(Data *a, Index n) {
 			std::rotate(a + j, a + j + i, a + j + i * 2);
 		}
 		i = i / 2;
+	}
+
+}
+
+template<typename Data, typename Index>
+int postshuffle(Data *a, Index n) {
+
+	// No need to postshufle
+	if (((n + 1) & n) == 0) return n;
+
+	int i = 0;
+	i |= 1 << (32 - __builtin_clz(n) - 1);
+	i = n - (i - 1);
+
+	std::rotate(a, a + n - i, a + n);
+
+	for(int j = i - 1; j > 0; j --){
+		std::rotate(a + j, a + j + 1, a + j * 2 + 1);
 	}
 
 }
@@ -255,7 +274,7 @@ void outshuffle(Data *a, Index n) {
 
 }
 
-//Note this is O(N**2), as opposed to its linear counterpart preshuffle_2
+//This is O(N**2), as opposed to its linear counterpart preshuffle_2
 template<typename Data, typename Index>
 int preshuffle(Data *a, Index n) {
 
@@ -279,7 +298,7 @@ int preshuffle(Data *a, Index n) {
 }
 
 template<typename Data, typename Index>
-int preshuffle_2(Data *a, Index n) {
+int preshuffle_2(Data *a, Index n) { 
 
 	// No need to preshufle
 	if (((n + 1) & n) == 0) return n;
@@ -332,7 +351,7 @@ int preshuffle_3(Data *a, Index n) {
 	std::rotate(a, a + i, a + n);
 
 	// *** need to regroup l items, no clue how yet...
-	// accounter for in preshuffle_2 but with an if statment in the nested for loop)
+	// accounted for in preshuffle_2 but with an if statment in the nested for loop
 	int l = 0;
 	l |= 1 << (32 - __builtin_clz(i));
 	l -= i;
@@ -389,5 +408,7 @@ int to_sorted(Data *a, Index n) {
 		rev_outshuffle(a, todo - 1);
 		todo *= 2;
 	}
+
+	postshuffle(a, n);
 
 }

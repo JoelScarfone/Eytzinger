@@ -4,7 +4,7 @@
 #include "eytzinger.hpp"
 
 const int n1 = 1;
-const int n2 = 2;
+const int n2 = 2000;
 const int n3 = 63;
 const int n4 = 100;
 const int n5 = 33554431;
@@ -33,7 +33,7 @@ template<typename Data>
 int isSorted(Data *a, int length){
 
 	for(int i = 0; i < length;  i++){
-		if(i >= length){ continue; }
+		if(i == length - 1){ return 1; }
 		if(a[i] > a[i + 1]){ return 0; }
 	}
 
@@ -144,6 +144,43 @@ TEST_CASE( "From sorted to eytzinger (using outshuffle_blocked)", "[eytzinger]" 
 }
 
 TEST_CASE( "From eytzinger to sorted", "[eytzinger]" ) {
+
+	auto *a1 = new std::uint32_t[n1];
+	auto *a2 = new std::uint32_t[n2];
+	auto *a3 = new std::uint32_t[n3];
+	auto *a4 = new std::uint32_t[n4];
+	auto *a5 = new std::uint32_t[n5];
+
+	std::iota(a1, a1+n1, 0);
+	std::iota(a2, a2+n2, 0);
+	std::iota(a3, a3+n3, 0);
+	std::iota(a4, a4+n4, 0);
+	std::iota(a5, a5+n5, 0);
+
+	to_eyzinger_blocked(a1, n1);
+	to_eyzinger_blocked(a2, n2);
+	to_eyzinger_blocked(a3, n3);
+	to_eyzinger_blocked(a4, n4);
+	to_eyzinger_blocked(a5, n5);
+
+	REQUIRE( isEytzinger(a1, n1) == 1);
+	REQUIRE( isEytzinger(a2, n2) == 1);
+	REQUIRE( isEytzinger(a3, n3) == 1);
+	REQUIRE( isEytzinger(a4, n4) == 1);
+	REQUIRE( isEytzinger(a5, n5) == 1);
+
+	to_sorted(a1, n1);
+	to_sorted(a2, n2);
+	to_sorted(a3, n3);
+	to_sorted(a4, n4);
+	to_sorted(a5, n5);
+
+	REQUIRE( isSorted(a1, n1) == 1);
+	REQUIRE( isSorted(a2, n2) == 1);
+	std::cout << "ASDASDASD" << std::endl;
+	REQUIRE( isSorted(a3, n3) == 1);
+	REQUIRE( isSorted(a4, n4) == 1);
+	REQUIRE( isSorted(a5, n5) == 1);
 
 }
 

@@ -4,7 +4,7 @@
 
 int main(){
 
-	const int n = 255;
+	const int n = 2000;
 
 	auto *a = new std::uint32_t[n];
 	std::iota(a, a+n, 1);
@@ -26,5 +26,6 @@ int main(){
 	for(int i = 0 ; i < n ; i ++){
 		std::cout << a[i] << " ";
 	}
+	std::cout << std::endl;
 
 }
