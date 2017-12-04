@@ -4,27 +4,18 @@
 
 int main(){
 
-	const int n = 2000;
-
+	int n = 100;
 	auto *a = new std::uint32_t[n];
-	std::iota(a, a+n, 1);
-	
-	std::cout << "To eytzinger: " << std::endl;
+	std::iota(a, a+n, 0);
+
 	to_eyzinger(a, n);
-	std::cout << "Result: " << std::endl;
-	for(int i = 0 ; i < n ; i ++){
-		std::cout << a[i] << " ";
-	}
 
-	std::cout << std::endl;
+	Eytzinger<uint32_t, int> arr(a, n);
 
-	//int b[15] = {1, 3,  5,  7, 9, 11, 13, 15, 2, 4, 6, 8, 10, 12, 14};
+ 	std::cout << arr.search(80) << std::endl;
 
-	std::cout << "To sorted: " << std::endl;
-	to_sorted(a, n);
-	std::cout << "Result: " << std::endl;
-	for(int i = 0 ; i < n ; i ++){
-		std::cout << a[i] << " ";
+	for(Eytzinger<uint32_t, int>::Iterator i = arr.begin(); i != arr.end(); ++i){
+		std::cout << *i << " ";
 	}
 	std::cout << std::endl;
 

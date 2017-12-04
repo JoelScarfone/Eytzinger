@@ -13,34 +13,6 @@ const int n5 = 33554431;
 * Test helper functions
 ----------------------------------------*/
 
-template<typename Data>
-int isEytzinger(Data *a, int length){
-	
-	for(int i = 0; i < length; i++){
-
-		if(2 * i + 1 >= length){ continue; }
-		if(a[i] < a[2 * i + 1]){ return 0; }
-
-		if(2 * i + 2 >= length){ continue; }
-		if(a[i] > a[2 * i + 2]){ return 0; }	
-
-	}
-
-	return 1;
-}
-
-template<typename Data>
-int isSorted(Data *a, int length){
-
-	for(int i = 0; i < length;  i++){
-		if(i == length - 1){ return 1; }
-		if(a[i] > a[i + 1]){ return 0; }
-	}
-
-	return 1;
-
-}
-
 /*----------------------------------------
 * Test cases for eytzinger.hpp
 ----------------------------------------*/
