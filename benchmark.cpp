@@ -83,7 +83,7 @@ void benchmark_outshuffle(){
 
 void benchmark_inshuffle(){
 
-	const int n = 1000000000;
+	const int n = 100000000;
 	auto *a = new std::uint32_t[n];
 
 	title("inshuffle");
@@ -118,40 +118,40 @@ void benchmark_to_eytzinger(){
 	title("to_eytzinger");
 	fill(a,n);
 	
-	std::cout << "Permuting using to_eyzinger...";
+	std::cout << "Permuting using to_eytzinger...";
 	std::cout.flush();
 	auto start = std::chrono::high_resolution_clock::now();
-	to_eyzinger(a, n);
+	to_eytzinger(a, n);
 	auto stop =  std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> elapsed = stop - start;
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 
 	fill<true>(a, n);
 
-	std::cout << "Permuting using to_eyzinger_jain...";
+	std::cout << "Permuting using to_eytzinger_jain...";
 	std::cout.flush();
 	start = std::chrono::high_resolution_clock::now();
-	to_eyzinger_jain(a, n);
+	to_eytzinger_jain(a, n);
 	stop =  std::chrono::high_resolution_clock::now();
 	elapsed = stop - start;
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 
 	fill<true>(a, n);
 
-	std::cout << "Permuting using to_eyzinger_blocked_rotate...";
+	std::cout << "Permuting using to_eytzinger_blocked_rotate...";
 	std::cout.flush();
 	start = std::chrono::high_resolution_clock::now();
-	to_eyzinger_blocked_rotate(a, n);
+	to_eytzinger_blocked_rotate(a, n);
 	stop =  std::chrono::high_resolution_clock::now();
 	elapsed = stop - start;
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 
 	fill<true>(a, n);
 
-	std::cout << "Permuting using to_eyzinger_rotate...";
+	std::cout << "Permuting using to_eytzinger_rotate...";
 	std::cout.flush();
 	start = std::chrono::high_resolution_clock::now();
-	to_eyzinger_rotate(a, n);
+	to_eytzinger_rotate(a, n);
 	stop =  std::chrono::high_resolution_clock::now();
 	elapsed = stop - start;
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
@@ -184,7 +184,7 @@ void benchmark_itteration(){
 	title("itteration");
 	fill(a,n);
 	std::cout << "Prepping eytzinger...";
-	to_eyzinger(a, n);
+	to_eytzinger(a, n);
 	Eytzinger<uint32_t, int> arr(a, n);
 	std::cout << "Done." << std::endl << std::endl;
 

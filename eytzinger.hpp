@@ -142,7 +142,7 @@ void blocked_outshuffle(Data *a, Index n) {
 }
 
 template<typename Data, typename Index>
-void to_eyzinger(Data *a, Index n) {
+void to_eytzinger(Data *a, Index n) {
 
 	const unsigned BLOCK=96;
 
@@ -500,7 +500,7 @@ void jain_outshuffle(Data *a, Index n) {
 }
 
 template<typename Data, typename Index>
-int to_eyzinger_jain(Data *a, Index n) {
+int to_eytzinger_jain(Data *a, Index n) {
 
 	int i = 0;
 	if (((n + 1) & n) != 0){
@@ -625,7 +625,7 @@ void blocked_outshuffle_rotate(Data *a, Index n) {
 
 
 template<typename Data, typename Index>
-int to_eyzinger_blocked_rotate(Data *a, Index n) {
+int to_eytzinger_blocked_rotate(Data *a, Index n) {
 
 
 	int i = 0;
@@ -762,7 +762,7 @@ int preshuffle_3(Data *a, Index n) {
 }
 
 template<typename Data, typename Index>
-int to_eyzinger_rotate(Data *a, Index n) {
+int to_eytzinger_rotate(Data *a, Index n) {
 
 	int todo = preshuffle_2(a, n);
 

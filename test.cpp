@@ -62,11 +62,11 @@ TEST_CASE( "From sorted to eytzinger, and vise versa", "[eytzinger]" ) {
 	std::iota(a4, a4+n4, 0);
 	std::iota(a5, a5+n5, 0);
 
-	to_eyzinger(a1, n1);
-	to_eyzinger(a2, n2);
-	to_eyzinger(a3, n3);
-	to_eyzinger(a4, n4);
-	to_eyzinger(a5, n5);
+	to_eytzinger(a1, n1);
+	to_eytzinger(a2, n2);
+	to_eytzinger(a3, n3);
+	to_eytzinger(a4, n4);
+	to_eytzinger(a5, n5);
 
 	REQUIRE( is_eytzinger(a1, n1) == 1);
 	REQUIRE( is_eytzinger(a2, n2) == 1);

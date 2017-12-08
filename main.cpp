@@ -30,7 +30,7 @@ int main(){
 	auto *a1 = new std::uint32_t[n1];
 	std::iota(a1, a1+n1, 0);
 
-	to_eyzinger(a1, n1);
+	to_eytzinger(a1, n1);
 
 	to_sorted(a1, n1);
 
