@@ -3,33 +3,63 @@
 #include <string>
 #include "eytzinger.hpp"
 
+/*--------------------------------------------
+Framework Functions
+--------------------------------------------*/
+
+void title(const char* title){
+
+	std::cout  << std::endl << "-------------------------------------" << std::endl;
+	std::cout << "Benchmarking: " << title << std::endl;
+	std::cout << "-------------------------------------" << std::endl << std::endl;
+}
+
+template<bool refill = false>
+void fill(std::uint32_t *a, const int n){
+	if(!refill){
+		std::cout << "Building and filling...";
+		std::cout.flush();
+		std::iota(a, a+n, 0);
+		std::cout << "done" << std::endl << std::endl;
+	}else{
+		std::cout << "Refilling...";
+		std::cout.flush();
+		std::iota(a, a+n, 0);
+		std::cout << "done" << std::endl << std::endl;
+	}
+}
+
+/*--------------------------------------------
+Benchmark Functions
+--------------------------------------------*/
+
 void benchmark_outshuffle(){
 
-	const int n = 134217727;
-
-	std::cout << "-------------------------------------" << std::endl;
-	std::cout << "Benchmarking: outshuffles" << std::endl;
-	std::cout << "-------------------------------------" << std::endl << std::endl;
-
-	std::cout << "Building and filling...";
-	std::cout.flush();
+	const int n = 100000000;
 	auto *a = new std::uint32_t[n];
 
-	std::iota(a, a+n, 0);
-	std::cout << " done." << std::endl << std::endl;
+	title("outshuffle");
+	fill(a, n);
 
-	std::cout << "Permuting using outshuffle...";
+	std::cout << "Permuting using blocked_outshuffle...";
 	std::cout.flush();
 	auto start = std::chrono::high_resolution_clock::now();
-	outshuffle(a, n);
+	blocked_outshuffle(a, n);
 	auto stop =  std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> elapsed = stop - start;
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 
-	std::cout << "Refilling...";
+	fill<true>(a, n);
+
+	std::cout << "Permuting using prime_outshuffle...";
 	std::cout.flush();
-	std::iota(a, a+n, 0);
-	std::cout << "done" << std::endl;
+	start = std::chrono::high_resolution_clock::now();
+	prime_outshuffle(a, n);
+	stop =  std::chrono::high_resolution_clock::now();
+	elapsed = stop - start;
+	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
+
+	fill<true>(a, n);
 
 	std::cout << "Permuting using jain_outshuffle...";
 	std::cout.flush();
@@ -39,145 +69,154 @@ void benchmark_outshuffle(){
 	elapsed = stop - start;
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 
-	std::cout << "Refilling...";
-	std::cout.flush();
-	std::iota(a, a+n, 0);
-	std::cout << "done" << std::endl;
+	fill<true>(a, n);
 
-	std::cout << "Permuting using blocked_outshuffle...";
-	
-	const unsigned BLOCK=96;
-
+	std::cout << "Permuting using blocked_outshuffle_rotate...";
 	std::cout.flush();
 	start = std::chrono::high_resolution_clock::now();
-	blocked_outshuffle<BLOCK>(a, n);
+	blocked_outshuffle_rotate(a, n);
 	stop =  std::chrono::high_resolution_clock::now();
 	elapsed = stop - start;
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 
-	std::cout << "Finished." << std::endl << std::endl;
+}
 
-	std::cout << "Refilling...";
+void benchmark_inshuffle(){
+
+	const int n = 1000000000;
+	auto *a = new std::uint32_t[n];
+
+	title("inshuffle");
+	fill(a, n);
+
+	std::cout << "Permuting using blocked_inshuffle...";
 	std::cout.flush();
-	std::iota(a, a+n, 0);
-	std::cout << "done" << std::endl;
+	auto start = std::chrono::high_resolution_clock::now();
+	blocked_inshuffle(a, n);
+	auto stop =  std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> elapsed = stop - start;
+	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 
-	std::cout << "Permuting using blocked_outshuffle_2...";
-	
+	fill<true>(a, n);
+
+	std::cout << "Permuting using prime_inshuffle...";
 	std::cout.flush();
 	start = std::chrono::high_resolution_clock::now();
-	blocked_outshuffle_2(a, n);
+	prime_inshuffle(a, n);
 	stop =  std::chrono::high_resolution_clock::now();
 	elapsed = stop - start;
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 
-	std::cout << "Finished." << std::endl << std::endl;
 
 }
 
 void benchmark_to_eytzinger(){
 
-	const int n = 1000000000;
-
-	std::cout << "-------------------------------------" << std::endl;
-	std::cout << "Benchmarking: to_eytzinger" << std::endl;
-	std::cout << "-------------------------------------" << std::endl << std::endl;
-
-	std::cout << "Building and filling...";
-	std::cout.flush();
+	const int n = 100000000;
 	auto *a = new std::uint32_t[n];
 
-	std::iota(a, a+n, 0);
-	std::cout << " done." << std::endl << std::endl;
-
+	title("to_eytzinger");
+	fill(a,n);
+	
 	std::cout << "Permuting using to_eyzinger...";
 	std::cout.flush();
 	auto start = std::chrono::high_resolution_clock::now();
-	//to_eyzinger(a, n);
+	to_eyzinger(a, n);
 	auto stop =  std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> elapsed = stop - start;
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 
-	std::cout << "Refilling...";
-	std::cout.flush();
-	std::iota(a, a+n, 0);
-	std::cout << "done" << std::endl;
+	fill<true>(a, n);
 
-	std::cout << "Permuting using to_eyzinger_blocked...";
+	std::cout << "Permuting using to_eyzinger_jain...";
 	std::cout.flush();
 	start = std::chrono::high_resolution_clock::now();
-	to_eyzinger_blocked(a, n);
+	to_eyzinger_jain(a, n);
 	stop =  std::chrono::high_resolution_clock::now();
 	elapsed = stop - start;
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 
-	std::cout << "Refilling...";
-	std::cout.flush();
-	std::iota(a, a+n, 0);
-	std::cout << "done" << std::endl;
+	fill<true>(a, n);
 
-	std::cout << "Permuting using to_eyzinger_blocked_2...";
-	
+	std::cout << "Permuting using to_eyzinger_blocked_rotate...";
 	std::cout.flush();
 	start = std::chrono::high_resolution_clock::now();
-	to_eyzinger_blocked_2(a, n);
+	to_eyzinger_blocked_rotate(a, n);
 	stop =  std::chrono::high_resolution_clock::now();
 	elapsed = stop - start;
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 
-	std::cout << "Finished." << std::endl << std::endl;
+	fill<true>(a, n);
+
+	std::cout << "Permuting using to_eyzinger_rotate...";
+	std::cout.flush();
+	start = std::chrono::high_resolution_clock::now();
+	to_eyzinger_rotate(a, n);
+	stop =  std::chrono::high_resolution_clock::now();
+	elapsed = stop - start;
+	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 
 }
 
-void benchmark_presuffle(){
+void benchmark_to_sorted(){
 
 	const int n = 100000000;
-
-	std::cout << "-------------------------------------" << std::endl;
-	std::cout << "Benchmarking: preshuffles" << std::endl;
-	std::cout << "-------------------------------------" << std::endl << std::endl;
-
-	std::cout << "Building and filling...";
-	std::cout.flush();
 	auto *a = new std::uint32_t[n];
 
-	std::iota(a, a+n, 0);
-	std::cout << " done." << std::endl << std::endl;
-
-	std::cout << "Permuting using preshuffle_2...";
+	title("to_sorted");
+	fill(a,n);
+	
+	std::cout << "Permuting using to_sorted...";
 	std::cout.flush();
 	auto start = std::chrono::high_resolution_clock::now();
-	preshuffle_2(a, n);
+	to_sorted(a, n);
+	auto stop =  std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> elapsed = stop - start;
+	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
+}
+
+void benchmark_itteration(){
+
+	const int n = 100000000;
+	auto *a = new std::uint32_t[n];
+	int temp = 0;
+
+	title("itteration");
+	fill(a,n);
+	std::cout << "Prepping eytzinger...";
+	to_eyzinger(a, n);
+	Eytzinger<uint32_t, int> arr(a, n);
+	std::cout << "Done." << std::endl << std::endl;
+
+	std::cout << "Basic itteration with sorted array...";
+	std::cout.flush();
+	auto start = std::chrono::high_resolution_clock::now();
+	for(int i = 0; i < n; i ++){
+		temp = temp + a[i] % 2;
+	}
 	auto stop =  std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> elapsed = stop - start;
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 
-	std::cout << "Refilling...";
-	std::cout.flush();
-	std::iota(a, a+n, 0);
-	std::cout << "done" << std::endl;
-
-	std::cout << "Permuting using preshuffle_3...";
+	std::cout << "pre incerement iteration with eytzinger...";
 	std::cout.flush();
 	start = std::chrono::high_resolution_clock::now();
-	preshuffle_3(a, n);
+	for(Eytzinger<uint32_t, int>::Iterator i = arr.begin(); i != arr.end(); ++i){
+		temp = temp + *i % 2;
+	}
 	stop =  std::chrono::high_resolution_clock::now();
 	elapsed = stop - start;
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 
-	// Commented out because preshuffle is just too slow
-	// std::cout << "Refilling...";
-	// std::cout.flush();
-	// std::iota(a, a+n, 0);
-	// std::cout << "done" << std::endl;
-
-	// std::cout << "Permuting using preshuffle...";
-	// std::cout.flush();
-	// start = std::chrono::high_resolution_clock::now();
-	// preshuffle(a, n);
-	// stop =  std::chrono::high_resolution_clock::now();
-	// elapsed = stop - start;
-	// std::cout << "done (" << elapsed.count() << "s)" << std::endl;
+	std::cout << "post incerement iteration with eytzinger...";
+	std::cout.flush();
+	start = std::chrono::high_resolution_clock::now();
+	for(Eytzinger<uint32_t, int>::Iterator i = arr.begin(); i != arr.end(); i++){
+		temp = temp + *i % 2;
+	}
+	stop =  std::chrono::high_resolution_clock::now();
+	elapsed = stop - start;
+	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 
 }
 
@@ -189,30 +228,44 @@ int main(int argc, char* argv[]){
 
 		std::string str1 (argv[1]);
 	  	std::string str2 ("outshuffle");
-  		std::string str3 ("preshuffle");
+  		std::string str3 ("inshuffle");
   		std::string str4 ("eytzinger");
+  		std::string str5 ("sorted");
+  		std::string str6 ("iteration");
 
 		if (str1.compare(str2) == 0){
 			task = 1;
-		}
+		}		
 		if (str1.compare(str3) == 0){
 			task = 2;
 		}
 		if (str1.compare(str4) == 0){
 			task = 3;
+		}		
+		if (str1.compare(str5) == 0){
+			task = 4;
+		}
+		if (str1.compare(str6) == 0){
+			task = 5;
 		}
 	}
 
 	switch(task){
 		case 1: benchmark_outshuffle();
 				break;
-		case 2: benchmark_presuffle();
+		case 2: benchmark_inshuffle();
 				break;
 		case 3: benchmark_to_eytzinger();
 				break;
+		case 4: benchmark_to_sorted();
+				break;
+		case 5: benchmark_itteration();
+				break;
 		default:benchmark_outshuffle();
-				benchmark_presuffle();
+				benchmark_inshuffle();
 				benchmark_to_eytzinger();
+				benchmark_to_sorted();
+				benchmark_itteration();
 				break;
 	}
 

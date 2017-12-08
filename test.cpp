@@ -4,33 +4,51 @@
 #include "eytzinger.hpp"
 
 const int n1 = 1;
-const int n2 = 2000;
+const int n2 = 2;
 const int n3 = 63;
-const int n4 = 100;
+const int n4 = 2000;
 const int n5 = 33554431;
 
 /*----------------------------------------
 * Test helper functions
 ----------------------------------------*/
 
+template<typename Data>
+int is_sorted(Data *a, int length){
+
+	for(int i = 0; i < length;  i++){
+		if(i == length - 1){ return 1; }
+		if(a[i] > a[i + 1]){ return 0; }
+	}
+
+	return 1;
+
+}
+
 /*----------------------------------------
 * Test cases for eytzinger.hpp
 ----------------------------------------*/
 
-//TODO: Add basic test cases for arrays not of length 2^n - 1
+TEST_CASE( "Eytzinger search", "[eytzinger]") {
 
-TEST_CASE( "Eytzinger search", "[eytzinger]" ) {
+	const int n = 20;
+	int a[n] = {12, 7, 16, 3, 10, 14, 18, 1, 5, 9, 11, 13, 15, 17, 100, 0, 2, 4, 6, 8};
 
-	int eytzingerArray[] = {8, 4, 12, 2, 6, 10, 14, 1, 3, 5,  7,  9,  11, 13, 15};
+	Eytzinger<int, int> arr(a, n);
 
-	REQUIRE(branchy_search_original(eytzingerArray, 8) == 0);
-	REQUIRE(branchy_search_original(eytzingerArray, 15) == 14);
-	REQUIRE(branchy_search_original(eytzingerArray, 1) == 7);
-	REQUIRE(branchy_search_original(eytzingerArray, 3) == 8);
+	REQUIRE( arr.search(12)  == 0);
+	REQUIRE( arr.search(8)  == 19);
+	REQUIRE( arr.search(3)  == 3);
+	REQUIRE( arr.search(2)  == 16);
+	REQUIRE( arr.search(100)  == 14);
+	REQUIRE( arr.search(-1)  == n);
+
+	REQUIRE( arr.upper_bound(99)  == 14);
+	REQUIRE( arr.upper_bound(101)  == n);
 
 }
 
-TEST_CASE( "From sorted to eytzinger (using outshuffle + preshufle)", "[eytzinger]" ) {
+TEST_CASE( "From sorted to eytzinger, and vise versa", "[eytzinger]" ) {
 
 	auto *a1 = new std::uint32_t[n1];
 	auto *a2 = new std::uint32_t[n2];
@@ -50,96 +68,11 @@ TEST_CASE( "From sorted to eytzinger (using outshuffle + preshufle)", "[eytzinge
 	to_eyzinger(a4, n4);
 	to_eyzinger(a5, n5);
 
-	REQUIRE( isEytzinger(a1, n1) == 1);
-	REQUIRE( isEytzinger(a2, n2) == 1);
-	REQUIRE( isEytzinger(a3, n3) == 1);
-	REQUIRE( isEytzinger(a4, n4) == 1);
-	REQUIRE( isEytzinger(a5, n5) == 1);
-
-}
-
-
-TEST_CASE( "From sorted to eytzinger (using outshuffle_jain)", "[eytzinger]" ) {
-
-	auto *a1 = new std::uint32_t[n1];
-	auto *a2 = new std::uint32_t[n2];
-	auto *a3 = new std::uint32_t[n3];
-	auto *a4 = new std::uint32_t[n4];
-	auto *a5 = new std::uint32_t[n5];
-
-	std::iota(a1, a1+n1, 0);
-	std::iota(a2, a2+n2, 0);
-	std::iota(a3, a3+n3, 0);
-	std::iota(a4, a4+n4, 0);
-	std::iota(a5, a5+n5, 0);
-
-	to_eyzinger_jain(a1, n1);
-	to_eyzinger_jain(a2, n2);
-	to_eyzinger_jain(a3, n3);
-	to_eyzinger_jain(a4, n4);
-	to_eyzinger_jain(a5, n5);
-
-	REQUIRE( isEytzinger(a1, n1) == 1);
-	REQUIRE( isEytzinger(a2, n2) == 1);
-	REQUIRE( isEytzinger(a3, n3) == 1);
-	REQUIRE( isEytzinger(a4, n4) == 1);
-	REQUIRE( isEytzinger(a5, n5) == 1);
-
-}
-
-TEST_CASE( "From sorted to eytzinger (using outshuffle_blocked)", "[eytzinger]" ) {
-
-	auto *a1 = new std::uint32_t[n1];
-	auto *a2 = new std::uint32_t[n2];
-	auto *a3 = new std::uint32_t[n3];
-	auto *a4 = new std::uint32_t[n4];
-	auto *a5 = new std::uint32_t[n5];
-
-	std::iota(a1, a1+n1, 0);
-	std::iota(a2, a2+n2, 0);
-	std::iota(a3, a3+n3, 0);
-	std::iota(a4, a4+n4, 0);
-	std::iota(a5, a5+n5, 0);
-
-	to_eyzinger_blocked(a1, n1);
-	to_eyzinger_blocked(a2, n2);
-	to_eyzinger_blocked(a3, n3);
-	to_eyzinger_blocked(a4, n4);
-	to_eyzinger_blocked(a5, n5);
-
-	REQUIRE( isEytzinger(a1, n1) == 1);
-	REQUIRE( isEytzinger(a2, n2) == 1);
-	REQUIRE( isEytzinger(a3, n3) == 1);
-	REQUIRE( isEytzinger(a4, n4) == 1);
-	REQUIRE( isEytzinger(a5, n5) == 1);
-
-}
-
-TEST_CASE( "From eytzinger to sorted", "[eytzinger]" ) {
-
-	auto *a1 = new std::uint32_t[n1];
-	auto *a2 = new std::uint32_t[n2];
-	auto *a3 = new std::uint32_t[n3];
-	auto *a4 = new std::uint32_t[n4];
-	auto *a5 = new std::uint32_t[n5];
-
-	std::iota(a1, a1+n1, 0);
-	std::iota(a2, a2+n2, 0);
-	std::iota(a3, a3+n3, 0);
-	std::iota(a4, a4+n4, 0);
-	std::iota(a5, a5+n5, 0);
-
-	to_eyzinger_blocked(a1, n1);
-	to_eyzinger_blocked(a2, n2);
-	to_eyzinger_blocked(a3, n3);
-	to_eyzinger_blocked(a4, n4);
-	to_eyzinger_blocked(a5, n5);
-
-	REQUIRE( isEytzinger(a1, n1) == 1);
-	REQUIRE( isEytzinger(a2, n2) == 1);
-	REQUIRE( isEytzinger(a3, n3) == 1);
-	REQUIRE( isEytzinger(a4, n4) == 1);
-	REQUIRE( isEytzinger(a5, n5) == 1);
+	REQUIRE( is_eytzinger(a1, n1) == 1);
+	REQUIRE( is_eytzinger(a2, n2) == 1);
+	REQUIRE( is_eytzinger(a3, n3) == 1);
+	REQUIRE( is_eytzinger(a4, n4) == 1);
+	REQUIRE( is_eytzinger(a5, n5) == 1);
 
 	to_sorted(a1, n1);
 	to_sorted(a2, n2);
@@ -147,34 +80,40 @@ TEST_CASE( "From eytzinger to sorted", "[eytzinger]" ) {
 	to_sorted(a4, n4);
 	to_sorted(a5, n5);
 
-	REQUIRE( isSorted(a1, n1) == 1);
-	REQUIRE( isSorted(a2, n2) == 1);
-	std::cout << "ASDASDASD" << std::endl;
-	REQUIRE( isSorted(a3, n3) == 1);
-	REQUIRE( isSorted(a4, n4) == 1);
-	REQUIRE( isSorted(a5, n5) == 1);
+	REQUIRE( is_sorted(a1, n1) == 1);
+	REQUIRE( is_sorted(a2, n2) == 1);
+	REQUIRE( is_sorted(a3, n3) == 1);
+	REQUIRE( is_sorted(a4, n4) == 1);
+	REQUIRE( is_sorted(a5, n5) == 1);
 
 }
 
-TEST_CASE( "Eytzinger next", "[eytzinger]" ) {
+TEST_CASE( "Eytzinger forward iterator", "[eytzinger]" ) {
 
-	int eytzingerArray[] = {8, 4, 12, 2, 6, 10, 14, 1, 3, 5,  7,  9,  11, 13, 15};
-	int length = 15;
+	const int n = 20;
+	int a[n] = {12, 7, 16, 3, 10, 14, 18, 1, 5, 9, 11, 13, 15, 17, 19, 0, 2, 4, 6, 8};
 
-	REQUIRE( eytzinger_next(7, length) == 3);
-	REQUIRE( eytzinger_next(3, length) == 8);
-	REQUIRE( eytzinger_next(8, length) == 1);
-	REQUIRE( eytzinger_next(1, length) == 9);
+	Eytzinger<int, int> arr(a,n);
+
+	int j = 0;
+	for(Eytzinger<int, int>::Iterator i = arr.begin(); i != arr.end(); ++i){
+		REQUIRE(*i == j);
+		j ++;
+	}
 
 }
 
-TEST_CASE( "Eytzinger prev", "[eytzinger]" ) {
+TEST_CASE( "Eytzinger reverse iterator", "[eytzinger]" ) {
 	
-	int eytzingerArray[] = {8, 4, 12, 2, 6, 10, 14, 1, 3, 5,  7,  9,  11, 13, 15};
-	int length = 15;
+	const int n = 20;
+	int a[n] = {12, 7, 16, 3, 10, 14, 18, 1, 5, 9, 11, 13, 15, 17, 19, 0, 2, 4, 6, 8};
 
-	REQUIRE( eytzinger_prev(3, length) == 7);
-	REQUIRE( eytzinger_prev(8, length) == 3);
-	REQUIRE( eytzinger_prev(1, length) == 8);
+	Eytzinger<int, int> arr(a,n);
+
+	int j = n - 1;
+	for(Eytzinger<int, int>::IteratorReverse i = arr.rbegin(); i != arr.rend(); ++i){
+		REQUIRE(*i == j);
+		j --;
+	}
 
 }
