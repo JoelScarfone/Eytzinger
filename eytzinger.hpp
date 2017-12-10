@@ -28,7 +28,6 @@ int is_eytzinger(Data *a, Index length){
 Algorythms to change from sorted to eytzinger in place
 --------------------------------------------*/
 
-
 template<typename I>
 inline I outshuffle_perm3(I i, I n) {
 	I out = i/2;
@@ -229,9 +228,6 @@ void blocked_inshuffle(Data *a, Index n) {
 	Index r = n % (2*B);
 	Index m = n - r;
 
-	// r items cant be shuffled using inshuffle18
-	// m items can
-
 	if(m > 0){
 		std::rotate(a + m / 2, a + m / 2 + r / 2, a + m + r / 2);
 
@@ -364,11 +360,11 @@ Eytzinger<Data, Index>::Eytzinger(Data *arr, Index n) {
 	this->n = n;
 }
 
-// Implemented branchy_search straight from Eytzinger paper
+// Implemented branchy_search
 template<class Data, typename Index>
 Index Eytzinger<Data, Index>::search(Data element) {
 
-	int i = 0;
+	Index i = 0;
 	
 	while (i < n){
 		i = ( element <= arr[i]) ? (2 * i + 1) : (2 * i + 2);
@@ -383,18 +379,16 @@ Index Eytzinger<Data, Index>::search(Data element) {
 template<class Data, typename Index>
 Index Eytzinger<Data, Index>::upper_bound(Data element) {
 
-	int i = 0;
-	
+	Index i = 0;
 	while (i < n){
 		i = (element <= arr[i]) ? (2 * i + 1) : (2 * i + 2);
 	}
 
 	Index j = (i + 1) >> __builtin_ffs(~(i + 1));
-
 	return (j == 0) ? n : j - 1;
 }
 
-// Returns the index of the item successing they eyztinger layed-out array element arr[i], with |arr| = n
+// Returns the index of the item successing they eyztinger layed-out array element arr[i]
 template<class Data, typename Index>
 Index Eytzinger<Data, Index>::next(Index i){
 
@@ -529,6 +523,87 @@ Using rotate to block
 --------------------------------------------*/
 
 template<typename Data, typename Index>
+void swap_next(Data *a, Index i){
+	Data x = a[i + 1];
+	a[i+1] = a[i];
+	a[i] = x;
+}
+
+template<typename Data, typename Index>
+void blockto_1024_custom_swap(Data *a, Index n){
+
+	struct block1 { Data dummy[1]; };
+	struct block2 { Data dummy[2]; };
+	struct block4 { Data dummy[4]; };
+	struct block8 { Data dummy[8]; };
+	struct block16 { Data dummy[16]; };
+	struct block32 { Data dummy[32]; };
+	struct block64 { Data dummy[64]; };
+	struct block128 { Data dummy[128]; };
+	struct block256 { Data dummy[256]; };
+	struct block512 { Data dummy[512]; };
+
+	block1* b1 = (block1*) a;
+
+	for(int i = 1; i < n / 1 - 1; i += 4){
+		swap_next(b1, i);
+	}
+
+	block2* b2 = (block2*) a;
+
+	for(int i = 1; i < n / 2 - 1; i += 4){
+		swap_next(b2, i);
+	}
+
+	block4* b4 = (block4*) a;
+
+	for(int i = 1; i < n / 4 - 1; i += 4){
+		swap_next(b4, i);
+	}	
+
+	block8* b8 = (block8*) a;
+
+	for(int i = 1; i < n / 8 - 1; i += 4){
+		swap_next(b8, i);
+	}
+
+	block16* b16 = (block16*) a;
+
+	for(int i = 1; i < n / 16 - 1; i += 4){
+		swap_next(b16, i);
+	}
+
+	block32* b32 = (block32*) a;
+
+	for(int i = 1; i < n / 32 - 1; i += 4){
+		swap_next(b32, i);
+	}
+
+	block64* b64 = (block64*) a;
+
+	for(int i = 1; i < n / 64 - 1; i += 4){
+		swap_next(b64, i);
+	}
+
+	block128* b128 = (block128*) a;
+
+	for(int i = 1; i < n / 128 - 1; i += 4){
+		swap_next(b128, i);
+	}
+
+	block256* b256 = (block256*) a;
+
+	for(int i = 1; i < n / 256 - 1; i += 4){
+		swap_next(b256, i);
+	}
+
+	block512* b512 = (block512*) a;
+
+	for(int i = 1; i < n / 512 - 1; i += 4){
+		swap_next(b512, i);
+	}
+
+}template<typename Data, typename Index>
 void blockto_1024(Data *a, Index n){
 
 	struct block1 { Data dummy[1]; };
@@ -545,7 +620,8 @@ void blockto_1024(Data *a, Index n){
 	block1* b1 = (block1*) a;
 
 	for(int i = 1; i < n / 1 - 1; i += 4){
-		std::rotate(b1 + i, b1 + i + 1, b1 + i + 2);
+		// std::rotate(b1 + i, b1 + i + 1, b1 + i + 2);
+		swap_next(b1, i);
 	}
 
 	block2* b2 = (block2*) a;
@@ -606,14 +682,14 @@ void blockto_1024(Data *a, Index n){
 }
 
 template<unsigned B=1024, bool prefetch=false, typename Data, typename Index>
-void blocked_outshuffle_rotate(Data *a, Index n) {
+void swap_outshuffle(Data *a, Index n) {
 
 	Index r = n % (2*B);
 	Index m = n - r;
 
 	prime_outshuffle(a+m, r);
 
-	blockto_1024(a, m);
+	blockto_1024_custom_swap(a, m);
 
 	struct block { Data dummy[B]; };
 	prime_outshuffle((block*)a, m/B);
@@ -625,7 +701,7 @@ void blocked_outshuffle_rotate(Data *a, Index n) {
 
 
 template<typename Data, typename Index>
-int to_eytzinger_blocked_rotate(Data *a, Index n) {
+int to_eytzinger_swap(Data *a, Index n) {
 
 
 	int i = 0;
@@ -633,7 +709,7 @@ int to_eytzinger_blocked_rotate(Data *a, Index n) {
 		i |= 1 << (32 - __builtin_clz(n) - 1);
 		i = n - (i - 1);
 
-		blocked_outshuffle_rotate(a, i * 2);
+		swap_outshuffle(a, i * 2);
 
 		std::rotate(a, a + i, a + i * 2);
 		std::rotate(a, a + i, a + n);
@@ -642,7 +718,7 @@ int to_eytzinger_blocked_rotate(Data *a, Index n) {
 	int todo = n - i;
 
 	while(todo > 1){
-		blocked_outshuffle_rotate(a, todo);
+		swap_outshuffle(a, todo);
 		todo = todo / 2;
 	}
 
@@ -676,7 +752,6 @@ void outshuffle(Data *a, Index n) {
 
 }
 
-//This is O(N**2), as opposed to its linear counterpart preshuffle_2
 template<typename Data, typename Index>
 int preshuffle(Data *a, Index n) {
 

@@ -1,41 +1,37 @@
 #include <iostream>
-#include<chrono>
-#include "eytzinger.hpp"
+#include <algorithm>
 
-// int get_pos_of(std::uint32_	t* arr, const int n, int l){
-// 	for(int i = 0; i < n; i ++){
-// 		if (arr[i] == l){
-// 			return i;
-// 		}
-// 	}
-// 	return -1;
-// }
+const int pows[5] = {1,2,4,8,16};
 
-// void print_prime_cycle_to_stdout(const int n){
+template<typename Data, typename Index>
+void swap_next(Data *a, Index i){
+	Data x = a[i + 1];
+	a[i+1] = a[i];
+	a[i] = x;
+}
 
-// 	auto *a = new std::uint32_t[n];
-// 	std::iota(a, a+n, 0);
-// 	blocked_outshuffle(a, n);
-
-// 	int temp = 0;
-// 	for(int i = 0; i < n; i++){
-// 		temp = get_pos_of(a, n, temp);
-// 		std::cout << temp << ", ";
-// 	}
-// }
+//Need to get around this for a full block_swap to work...
+template<typename Data, typename Index>
+void block_swap(Data * a, Index n, const int B){
+	struct block { Data dummy[B]; };
+	block *arr = (block*)a;
+	for(int i = 1; i < n/B; i+= 4){
+		swap_next(arr, i);
+	}
+}
 
 int main(){
 
-	const int n1 = 100;
-	auto *a1 = new std::uint32_t[n1];
-	std::iota(a1, a1+n1, 0);
+	const int n = 100;
+	auto *a = new std::uint32_t[n];
+	std::iota(a, a+n, 0);
 
-	to_eytzinger(a1, n1);
+	block_swap(a, n, pows[0]);
 
-	to_sorted(a1, n1);
-
-	for(int i = 0; i < n1; i ++){
-		std::cout << a1[i] << " ";
+	for(int i = 0 ;i < n; i++){
+		std::cout << a[i] << " ";
 	}
 	std::cout << std::endl;
+
 }
+

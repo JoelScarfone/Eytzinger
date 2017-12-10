@@ -51,6 +51,16 @@ void benchmark_outshuffle(){
 
 	fill<true>(a, n);
 
+	std::cout << "Permuting using swap_outshuffle...";
+	std::cout.flush();
+	start = std::chrono::high_resolution_clock::now();
+	swap_outshuffle(a, n);
+	stop =  std::chrono::high_resolution_clock::now();
+	elapsed = stop - start;
+	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
+
+	fill<true>(a, n);
+
 	std::cout << "Permuting using prime_outshuffle...";
 	std::cout.flush();
 	start = std::chrono::high_resolution_clock::now();
@@ -65,16 +75,6 @@ void benchmark_outshuffle(){
 	std::cout.flush();
 	start = std::chrono::high_resolution_clock::now();
 	jain_outshuffle(a, n);
-	stop =  std::chrono::high_resolution_clock::now();
-	elapsed = stop - start;
-	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
-
-	fill<true>(a, n);
-
-	std::cout << "Permuting using blocked_outshuffle_rotate...";
-	std::cout.flush();
-	start = std::chrono::high_resolution_clock::now();
-	blocked_outshuffle_rotate(a, n);
 	stop =  std::chrono::high_resolution_clock::now();
 	elapsed = stop - start;
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
@@ -128,20 +128,20 @@ void benchmark_to_eytzinger(){
 
 	fill<true>(a, n);
 
-	std::cout << "Permuting using to_eytzinger_jain...";
+	std::cout << "Permuting using to_eytzinger_swap...";
 	std::cout.flush();
 	start = std::chrono::high_resolution_clock::now();
-	to_eytzinger_jain(a, n);
+	to_eytzinger_swap(a, n);
 	stop =  std::chrono::high_resolution_clock::now();
 	elapsed = stop - start;
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 
 	fill<true>(a, n);
 
-	std::cout << "Permuting using to_eytzinger_blocked_rotate...";
+	std::cout << "Permuting using to_eytzinger_jain...";
 	std::cout.flush();
 	start = std::chrono::high_resolution_clock::now();
-	to_eytzinger_blocked_rotate(a, n);
+	to_eytzinger_jain(a, n);
 	stop =  std::chrono::high_resolution_clock::now();
 	elapsed = stop - start;
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
@@ -175,24 +175,24 @@ void benchmark_to_sorted(){
 	std::cout << "done (" << elapsed.count() << "s)" << std::endl;
 }
 
-void benchmark_itteration(){
+void benchmark_iteration(){
 
 	const int n = 100000000;
 	auto *a = new std::uint32_t[n];
 	int temp = 0;
 
-	title("itteration");
+	title("iteration");
 	fill(a,n);
 	std::cout << "Prepping eytzinger...";
 	to_eytzinger(a, n);
 	Eytzinger<uint32_t, int> arr(a, n);
 	std::cout << "Done." << std::endl << std::endl;
 
-	std::cout << "Basic itteration with sorted array...";
+	std::cout << "Basic iteration with sorted array...";
 	std::cout.flush();
 	auto start = std::chrono::high_resolution_clock::now();
 	for(int i = 0; i < n; i ++){
-		temp = temp + a[i] % 2;
+		temp = temp + a[i] % 123;
 	}
 	auto stop =  std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> elapsed = stop - start;
@@ -202,7 +202,7 @@ void benchmark_itteration(){
 	std::cout.flush();
 	start = std::chrono::high_resolution_clock::now();
 	for(Eytzinger<uint32_t, int>::Iterator i = arr.begin(); i != arr.end(); ++i){
-		temp = temp + *i % 2;
+		temp = temp + *i % 123;
 	}
 	stop =  std::chrono::high_resolution_clock::now();
 	elapsed = stop - start;
@@ -259,13 +259,13 @@ int main(int argc, char* argv[]){
 				break;
 		case 4: benchmark_to_sorted();
 				break;
-		case 5: benchmark_itteration();
+		case 5: benchmark_iteration();
 				break;
 		default:benchmark_outshuffle();
 				benchmark_inshuffle();
 				benchmark_to_eytzinger();
 				benchmark_to_sorted();
-				benchmark_itteration();
+				benchmark_iteration();
 				break;
 	}
 
